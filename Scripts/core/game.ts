@@ -81,8 +81,12 @@ var game = (() => {
         sphereGeometry = new SphereGeometry(2, 25, 25);
         sun = new PointLight( 0xffffff, 3, 35, 1.4 );
         sun.position.set( 0, 0, 0 );
+        sun.castShadow=true;
+        sun.shadowCameraNear=1;
+       // sun.shadowMapHeight = 2048;
+       // sun.shadowMapWidth = 2048;
         sun.name = "The Sun";        
-        sun.add(new THREE.Mesh( sphereGeometry, new THREE.MeshBasicMaterial( { color: 0xFFF247 } ) ));       
+        sun.add(new Mesh( sphereGeometry, new MeshBasicMaterial( { color: 0xFFF247 } ) ));       
         scene.add( sun );
         console.log("Added Sun (Sphere Primitive) to the Scene");   
         
