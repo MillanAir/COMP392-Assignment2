@@ -43,6 +43,7 @@ var game = (function () {
     var moonLike;
     var icing;
     var eco;
+    var moon;
     var sphereGeometry;
     var sphereMaterial;
     var ambientLight;
@@ -58,6 +59,7 @@ var game = (function () {
     var emptyMoonLike;
     var emptyIcing;
     var emptyEco;
+    var emptyMoon;
     function init() {
         // Instantiate a new Scene object
         //scene = new Scene();
@@ -65,12 +67,6 @@ var game = (function () {
         clock = new Clock();
         setupRenderer(); // setup the default renderer
         setupCamera(); // setup the camera        
-        //Add a Plane to the Scene
-        plane = new gameObject(new PlaneGeometry(20, 20, 1, 1), new LambertMaterial({ color: 0xf4a460 }), 0, 0, 0);
-        plane.rotation.x = -0.5 * Math.PI;
-        plane.name = "ground";
-        scene.add(plane);
-        console.log("Added Plane Primitive to scene...");
         // Add a Sun to the Scene
         sphereGeometry = new SphereGeometry(2.0, 25, 25);
         sphereMaterial = new LambertMaterial({ color: 0xD78415 });
@@ -105,6 +101,15 @@ var game = (function () {
         redDevil = new gameObject(new SphereGeometry(0.7, 22, 22), new LambertMaterial({ color: 0xF14545 }), 10, 0, 0);
         emptyRedDevil.add(redDevil);
         console.log("Added redDevil to emptyRedDevil...");
+        // Add an Empty Moon to the Red Devil
+        emptyMoon = new Object3D();
+        emptyMoon.position.set(0, 0, 0);
+        redDevil.add(emptyMoon);
+        console.log("Added emptyMoon to the redDevil object...");
+        // Add moon to the Red Devil
+        moon = new gameObject(new SphereGeometry(0.08, 22, 22), new LambertMaterial({ color: 0xF9F9F9 }), 1.8, 0, 0);
+        emptyMoon.add(moon);
+        console.log("Added moon to emptyMoon...");
         // Add an Empty Moon Like to the scene
         emptyMoonLike = new Object3D();
         emptyMoonLike.position.set(0, 0, 0);
@@ -128,7 +133,7 @@ var game = (function () {
         emptyEco.position.set(0, 0, 0);
         sun.add(emptyEco);
         console.log("Added emptyEco to the sun object...");
-        // Add planet icing to the scene
+        // Add planet eco to the scene
         eco = new gameObject(new SphereGeometry(0.3, 18, 18), new LambertMaterial({ color: 0x2DCD49 }), 17, 0, 0);
         emptyEco.add(eco);
         console.log("Added eco to emptyEco...");
@@ -151,7 +156,7 @@ var game = (function () {
         addControl(control);
         // add an axis helper to the scene
         axes = new AxisHelper(20);
-        eco.add(axes);
+        icing.add(axes);
         console.log("Added Axis Helper to scene...");
         // Add framerate stats
         addStatsObject();
@@ -182,8 +187,8 @@ var game = (function () {
             emptyMoonLike.rotation.y += control.rotationSpeed + 0.005;
             emptyIcing.rotation.y += control.rotationSpeed + 0.002;
             emptyEco.rotation.y += control.rotationSpeed + 0.0005;
+            emptyMoon.rotation.y += redDevil.rotation.y + 0.05;
         }
-        //firstPersonControls.update(delta);
         // render using requestAnimationFrame
         requestAnimationFrame(gameLoop);
         // render the scene
