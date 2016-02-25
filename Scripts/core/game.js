@@ -47,7 +47,6 @@ var game = (function () {
     var sphereGeometry;
     var sphereMaterial;
     var ambientLight;
-    var spotLight;
     var control;
     var gui;
     var stats;
@@ -68,10 +67,11 @@ var game = (function () {
         setupRenderer(); // setup the default renderer
         setupCamera(); // setup the camera        
         // Add a Sun to the Scene
-        sphereGeometry = new SphereGeometry(2.0, 25, 25);
-        sphereMaterial = new LambertMaterial({ color: 0xD78415 });
-        sun = new gameObject(sphereGeometry, sphereMaterial, 0, 2.5, 0);
+        sphereGeometry = new SphereGeometry(2, 25, 25);
+        sun = new PointLight(0xffffff, 3, 35, 1.4);
+        sun.position.set(0, 0, 0);
         sun.name = "The Sun";
+        sun.add(new THREE.Mesh(sphereGeometry, new THREE.MeshBasicMaterial({ color: 0xFFF247 })));
         scene.add(sun);
         console.log("Added Sun (Sphere Primitive) to the Scene");
         // Add an Empty Raedon to the scene
@@ -137,26 +137,16 @@ var game = (function () {
         eco = new gameObject(new SphereGeometry(0.3, 18, 18), new LambertMaterial({ color: 0x2DCD49 }), 17, 0, 0);
         emptyEco.add(eco);
         console.log("Added eco to emptyEco...");
-        // Add a SpotLight to the scene
-        spotLight = new SpotLight(0xffffff);
-        spotLight.position.set(5.6, 23.1, 5.4);
-        spotLight.rotation.set(-0.8, 42.7, 19.5);
-        spotLight.intensity = 2;
-        spotLight.shadowCameraNear = 1;
-        spotLight.shadowMapHeight = 2048;
-        spotLight.shadowMapWidth = 2048;
-        spotLight.angle = 60 * (Math.PI / 180);
-        spotLight.distance = 200;
-        spotLight.castShadow = true;
-        scene.add(spotLight);
-        console.log("Added a SpotLight Light to Scene");
+        //Natural AmbientLight
+        var ambientLight = new THREE.AmbientLight(0x181818); // soft white light
+        scene.add(ambientLight);
         // add controls
         gui = new GUI();
         control = new Control(0.001);
         addControl(control);
         // add an axis helper to the scene
         axes = new AxisHelper(20);
-        icing.add(axes);
+        sun.add(axes);
         console.log("Added Axis Helper to scene...");
         // Add framerate stats
         addStatsObject();
