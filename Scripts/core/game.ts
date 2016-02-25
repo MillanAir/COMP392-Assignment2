@@ -41,7 +41,13 @@ var game = (() => {
     var camera: PerspectiveCamera;
     var axes: AxisHelper;
     var plane: Mesh;
-    var sphere: Mesh;
+    var sun: Mesh;
+    var raedon: Mesh;
+    var blueBall: Mesh;
+    var redDevil: Mesh;
+    var moonLike: Mesh;
+    var icing: Mesh;
+    var eco: Mesh;
     var sphereGeometry: SphereGeometry;
     var sphereMaterial: LambertMaterial;
     var ambientLight: AmbientLight;
@@ -50,8 +56,13 @@ var game = (() => {
     var gui: GUI;
     var stats: Stats;
     var step: number = 0;
-    var clock:Clock;
-    var firstPersonControls: FirstPersonControls;
+    var clock: Clock;
+    var emptyRaedon: Object3D;
+    var emptyBlueBall: Object3D;
+    var emptyRedDevil: Object3D;
+    var emptyMoonLike: Object3D;
+    var emptyIcing: Object3D;
+    var emptyEco: Object3D;
 
     function init() {
         // Instantiate a new Scene object
@@ -59,7 +70,7 @@ var game = (() => {
 
         // setup a THREE.js Clock object
         clock = new Clock();
-        
+
         setupRenderer(); // setup the default renderer
 	
         setupCamera(); // setup the camera        
@@ -73,45 +84,105 @@ var game = (() => {
         plane.name = "ground";
         scene.add(plane);
         console.log("Added Plane Primitive to scene...");
-    
-        // Add a Sphere to the Scene
-        sphereGeometry = new SphereGeometry(2.5, 25, 25);
-        sphereMaterial = new LambertMaterial({color:0xff0000});
-        sphere = new gameObject(sphereGeometry, sphereMaterial, 0, 2.5, 0);
-        sphere.name = "The Red Planet";
-        scene.add(sphere);
-        console.log("Added Sphere Primitive to the scene");
-    
-        // setup first person controls
-        firstPersonControls = new FirstPersonControls(sphere);
-        firstPersonControls.lookSpeed = 0.4;
-        firstPersonControls.movementSpeed  = 10;
-        firstPersonControls.lookVertical = true;
-        firstPersonControls.constrainVertical = true;
-        firstPersonControls.verticalMin = 0;
-        firstPersonControls.verticalMax = 2.0;
-        firstPersonControls.lon = -150;
-        firstPersonControls.lat = 120;
         
-        console.log(firstPersonControls.target);
+        // Add a Sun to the Scene
+        sphereGeometry = new SphereGeometry(2.0, 25, 25);
+        sphereMaterial = new LambertMaterial({ color: 0xD78415 });
+        sun = new gameObject(sphereGeometry, sphereMaterial, 0, 2.5, 0);
+        sun.name = "The Sun";
+        scene.add(sun);
+        console.log("Added Sun (Sphere Primitive) to the Scene");   
         
-        // add an axis helper to the scene
-        axes = new AxisHelper(20);
-        sphere.add(axes);
-        console.log("Added Axis Helper to scene...");
-    
-        // Add an AmbientLight to the scene
-        //ambientLight = new AmbientLight(0x090909);
-       //scene.add(ambientLight);
-        //console.log("Added an Ambient Light to Scene");
-	
+        // Add an Empty Raedon to the scene
+        emptyRaedon = new Object3D();
+        emptyRaedon.position.set(0, 0, 0);
+        sun.add(emptyRaedon);
+        console.log("Added Empty Raedon to the sun object...");
+
+        // Add planet Raedon to the scene
+        raedon = new gameObject(
+            new SphereGeometry(0.2, 22, 22),
+            new LambertMaterial({ color: 0x4C0700 }),5,0,0);
+
+        emptyRaedon.add(raedon)
+        console.log("Added Raedon to empty Raedon...");
+        
+        // Add an Empty Blue Ball to the scene
+        emptyBlueBall = new Object3D();
+        emptyBlueBall.position.set(0, 0, 0);
+        sun.add(emptyBlueBall);
+        console.log("Added emptyBlueBall to the sun object...");
+
+        // Add planet Blue Ball to the scene
+        blueBall = new gameObject(
+            new SphereGeometry(0.3, 22, 22),
+            new LambertMaterial({ color: 0x2E8195 }),7,0,0);
+
+        emptyBlueBall.add(blueBall)
+        console.log("Added Blue Ball to emptyBlueBall...");
+        
+        // Add an Empty Red Devil to the scene
+        emptyRedDevil = new Object3D();
+        emptyRedDevil.position.set(0, 0, 0);
+        sun.add(emptyRedDevil);
+        console.log("Added emptyRedDevil to the sun object...");
+
+        // Add planet redDevil to the scene
+        redDevil = new gameObject(
+            new SphereGeometry(0.7, 22, 22),
+            new LambertMaterial({ color: 0xF14545 }),10,0,0);
+
+        emptyRedDevil.add(redDevil)
+        console.log("Added redDevil to emptyRedDevil...");
+        
+        // Add an Empty Moon Like to the scene
+        emptyMoonLike = new Object3D();
+        emptyMoonLike.position.set(0, 0, 0);
+        sun.add(emptyMoonLike);
+        console.log("Added emptyMoonLike to the sun object...");
+
+        // Add planet moonLike to the scene
+        moonLike = new gameObject(
+            new SphereGeometry(0.55, 18, 18),
+            new LambertMaterial({ color: 0x908D8D }),13,0,0);
+
+        emptyMoonLike.add(moonLike)
+        console.log("Added moonLike to emptyMoonLike...");
+        
+        // Add an Empty Icing to the scene
+        emptyIcing = new Object3D();
+        emptyIcing.position.set(0, 0, 0);
+        sun.add(emptyIcing);
+        console.log("Added emptyIcing to the sun object...");
+
+        // Add planet icing to the scene
+        icing = new gameObject(
+            new SphereGeometry(0.35, 18, 18),
+            new LambertMaterial({ color: 0xA156CB }),15,0,0);
+
+        emptyIcing.add(icing)
+        console.log("Added icing to emptyIcing...");
+        
+        // Add an Empty Eco to the scene
+        emptyEco= new Object3D();
+        emptyEco.position.set(0, 0, 0);
+        sun.add(emptyEco);
+        console.log("Added emptyEco to the sun object...");
+
+        // Add planet icing to the scene
+        eco = new gameObject(
+            new SphereGeometry(0.3, 18, 18),
+            new LambertMaterial({ color: 0x2DCD49 }),17,0,0);
+
+        emptyEco.add(eco)
+        console.log("Added eco to emptyEco...");
+
         // Add a SpotLight to the scene
         spotLight = new SpotLight(0xffffff);
         spotLight.position.set(5.6, 23.1, 5.4);
         spotLight.rotation.set(-0.8, 42.7, 19.5);
         spotLight.intensity = 2;
         spotLight.shadowCameraNear = 1;
-        //spotLight.shadowCameraFar =100;
         spotLight.shadowMapHeight = 2048;
         spotLight.shadowMapWidth = 2048;
         spotLight.angle = 60 * (Math.PI / 180);
@@ -120,11 +191,17 @@ var game = (() => {
         scene.add(spotLight);
         console.log("Added a SpotLight Light to Scene");
     
+        
         // add controls
         gui = new GUI();
-        control = new Control(0.05);
+        control = new Control(0.001);
         addControl(control);
 
+        // add an axis helper to the scene
+        axes = new AxisHelper(20);        
+        eco.add(axes);
+        console.log("Added Axis Helper to scene...");
+        
         // Add framerate stats
         addStatsObject();
         console.log("Added Stats to scene...");
@@ -135,7 +212,7 @@ var game = (() => {
     }
 
     function addControl(controlObject: Control): void {
-        gui.add(controlObject, 'rotationSpeed', -0.5, 0.5);
+        gui.add(controlObject, 'rotationSpeed', -0.05, 0.20);
     }
 
     function addStatsObject() {
@@ -150,11 +227,25 @@ var game = (() => {
     // Setup main game loop
     function gameLoop(): void {
         stats.update();
-        var delta:number = clock.getDelta();
+        var delta: number = clock.getDelta();
+
+        if(control.rotationSpeed!=0){
+        sun.rotation.y += control.rotationSpeed;
         
-        sphere.rotation.y += control.rotationSpeed;
-    
-        firstPersonControls.update(delta);
+        emptyRaedon.rotation.y += control.rotationSpeed + 0.065;
+        
+        emptyBlueBall.rotation.y += control.rotationSpeed + 0.05;
+        
+        emptyRedDevil.rotation.y += control.rotationSpeed + 0.015;
+        
+        emptyMoonLike.rotation.y += control.rotationSpeed + 0.005;
+        
+        emptyIcing.rotation.y += control.rotationSpeed + 0.002;
+        
+        emptyEco.rotation.y += control.rotationSpeed + 0.0005;
+        
+        }
+        //firstPersonControls.update(delta);
         
         // render using requestAnimationFrame
         requestAnimationFrame(gameLoop);
@@ -165,8 +256,8 @@ var game = (() => {
 
     // Setup default renderer
     function setupRenderer(): void {
-        renderer = new Renderer();
-        renderer.setClearColor(0xEEEEEE, 1.0);
+        renderer = new Renderer({ alpha: true });
+        renderer.setClearColor(0xffffff, 0.0);
         renderer.setSize(CScreen.WIDTH, CScreen.HEIGHT);
         //renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
