@@ -64,6 +64,8 @@ var game = (() => {
     var emptyIcing: Object3D;
     var emptyEco: Object3D;
     var emptyMoon: Object3D;
+    var firstPersonControls:FirstPersonControls;
+    var texture;
 
     function init() {
         // Instantiate a new Scene object
@@ -74,8 +76,7 @@ var game = (() => {
 
         setupRenderer(); // setup the default renderer
 	
-        setupCamera(); // setup the camera        
-    
+        setupCamera(); // setup the camera
         
         // Add a Sun to the Scene
         sphereGeometry = new SphereGeometry(2, 25, 25);
@@ -85,10 +86,25 @@ var game = (() => {
         sun.shadowCameraNear=1;
        // sun.shadowMapHeight = 2048;
        // sun.shadowMapWidth = 2048;
-        sun.name = "The Sun";        
-        sun.add(new Mesh( sphereGeometry, new MeshBasicMaterial( { color: 0xFFF247 } ) ));       
+        sun.name = "The Sun";
+        
+        // load texture to blueBall
+        textureLoader("../../res/textures/sun.png");
+                
+        sun.add(new Mesh( sphereGeometry, new MeshBasicMaterial( {color:0xffff00 } ) ));       
         scene.add( sun );
         console.log("Added Sun (Sphere Primitive) to the Scene");   
+        
+        // setup first person controls
+        // firstPersonControls = new FirstPersonControls(sun);
+        //  firstPersonControls.lookSpeed = 0.1;
+        //  firstPersonControls.movementSpeed = 4;
+        //  firstPersonControls.lookVertical = true;
+        //  firstPersonControls.constrainVertical = true;
+        //  firstPersonControls.verticalMin = 0;
+        //  firstPersonControls.verticalMax = 2.0;
+        //  firstPersonControls.lon = -150; //-150
+        //  firstPersonControls.lat = 120;    //120
         
         // Add an Empty Raedon to the scene
         emptyRaedon = new Object3D();
@@ -96,10 +112,13 @@ var game = (() => {
         sun.add(emptyRaedon);
         console.log("Added Empty Raedon to the sun object...");
 
+        // load texture to raedon
+        textureLoader("../../res/textures/raedon.jpg"); 
+        
         // Add planet Raedon to the scene
         raedon = new gameObject(
             new SphereGeometry(0.2, 22, 22),
-            new LambertMaterial({ color: 0x4C0700 }),5,0,0);
+            new LambertMaterial({ map:texture }),5,0,0);
 
         emptyRaedon.add(raedon)
         console.log("Added Raedon to empty Raedon...");
@@ -110,10 +129,13 @@ var game = (() => {
         sun.add(emptyBlueBall);
         console.log("Added emptyBlueBall to the sun object...");
 
+        // load texture to blueBall
+        textureLoader("../../res/textures/blueBall.png");
+        
         // Add planet Blue Ball to the scene
         blueBall = new gameObject(
             new SphereGeometry(0.3, 22, 22),
-            new LambertMaterial({ color: 0x2E8195 }),7,0,0);
+            new LambertMaterial({ map:texture }),7,0,0);
 
         emptyBlueBall.add(blueBall)
         console.log("Added Blue Ball to emptyBlueBall...");
@@ -124,13 +146,15 @@ var game = (() => {
         sun.add(emptyRedDevil);
         console.log("Added emptyRedDevil to the sun object...");
 
+        // load texture to redDevil
+        textureLoader("../../res/textures/redDevil.jpg");       
+        
         // Add planet redDevil to the scene
         redDevil = new gameObject(
             new SphereGeometry(0.7, 22, 22),
-            new LambertMaterial({ color: 0xF14545 }),10,0,0);
-
+            new LambertMaterial({ map:texture }),10,0,0);
         emptyRedDevil.add(redDevil)
-        console.log("Added redDevil to emptyRedDevil...");
+        console.log("Added redDevil to emptyRedDevil...");  
         
         // Add an Empty Moon to the Red Devil
         emptyMoon = new Object3D();
@@ -152,10 +176,13 @@ var game = (() => {
         sun.add(emptyMoonLike);
         console.log("Added emptyMoonLike to the sun object...");
 
+        // load texture to moonLike
+        textureLoader("../../res/textures/moonLike.jpg");
+        
         // Add planet moonLike to the scene
         moonLike = new gameObject(
             new SphereGeometry(0.55, 18, 18),
-            new LambertMaterial({ color: 0x908D8D }),13,0,0);
+            new LambertMaterial({ map:texture }),13,0,0);
 
         emptyMoonLike.add(moonLike)
         console.log("Added moonLike to emptyMoonLike...");
@@ -166,10 +193,13 @@ var game = (() => {
         sun.add(emptyIcing);
         console.log("Added emptyIcing to the sun object...");
 
+        // load texture to icing
+        textureLoader("../../res/textures/icing.jpg");
+        
         // Add planet icing to the scene
         icing = new gameObject(
             new SphereGeometry(0.35, 18, 18),
-            new LambertMaterial({ color: 0xA156CB }),15,0,0);
+            new LambertMaterial({ map:texture }),15,0,0);
 
         emptyIcing.add(icing)
         console.log("Added icing to emptyIcing...");
@@ -180,10 +210,13 @@ var game = (() => {
         sun.add(emptyEco);
         console.log("Added emptyEco to the sun object...");
 
+        // load texture to eco
+        textureLoader("../../res/textures/eco.jpg");
+        
         // Add planet eco to the scene
         eco = new gameObject(
             new SphereGeometry(0.3, 18, 18),
-            new LambertMaterial({ color: 0x2DCD49 }),17,0,0);
+            new LambertMaterial({ map:texture }),17,0,0);
 
         emptyEco.add(eco)
         console.log("Added eco to emptyEco...");
@@ -228,8 +261,11 @@ var game = (() => {
     function gameLoop(): void {
         stats.update();
         var delta: number = clock.getDelta();
+        
+        //firstPersonControls.update(delta);
 
         if(control.rotationSpeed!=0){
+            
         sun.rotation.y += control.rotationSpeed;
         
         emptyRaedon.rotation.y += control.rotationSpeed + 0.065;
@@ -274,6 +310,16 @@ var game = (() => {
         camera.position.z = -20.5;
         camera.lookAt(new Vector3(0, 0, 0));
         console.log("Finished setting up Camera...");
+    }
+    
+    // Setup texture loader for objects
+    function textureLoader(url){
+        
+        // load a texture, set wrap mode to repeat
+        texture = new THREE.TextureLoader().load( url );
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set( 4, 4 );
     }
 
     window.onload = init;
